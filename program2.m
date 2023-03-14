@@ -1,0 +1,15 @@
+clc;
+clear all;
+close all;
+P=[2];
+Y=[4];
+x=conv(P,Y);
+syms w t;
+z=simplify(abs(int(x*exp(-j*w*t),w,0,1)));
+subplot(2,1,1);
+ezplot(z);
+a=abs(int(P*exp(-j*w*t),w,0,1));
+b=abs(int(Y*exp(-j*w*t),w,0,1));
+M=simplify(abs(a*b));
+subplot(2,1,2);
+ezplot(M);
