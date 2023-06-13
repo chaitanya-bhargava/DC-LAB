@@ -1,16 +1,18 @@
 clc;
 clear all;
 close all;
-r=rand(1,1000000);
-M=mean(r)
-V=var(r)
-x=-20:0.01:20;
-pdf=exp(-((x-M).^2)/2*V)/sqrt(2*pi*V);
-cdf=1/2*(1+erf((x-M)/sqrt(2*V)));
-plot(x,pdf,'r','LineWidth',2);
+pd1=makedist('Normal','mu',0,'sigma',sqrt(1/8));
+x=-3:0.01:3;
+pdf1=pdf(pd1,x);
+partition = [-1:.2:1]; 
+codebook = [-1.2:.2:1]; 
+[index,quants] = quantiz(pdf1,partition,codebook);
+subplot(2,1,1);
+plot(x,pdf1,'r','LineWidth',2)
 hold on;
-plot(x,cdf,'b','LineWidth',2);
-legend({'PDF','CDF'},'Location','northwest');
-xlabel('Observation');
-ylabel('Normal Probability Density');
-hold off;
+plot(x,quants,'b','LineWidth',2);
+legend('Original signal','Quantized signal');
+error=abs(quants-pdf1);
+totalerror=trapz(error)
+subplot(2,1,2);
+plot(x,error,'k','LineWidth',2);
